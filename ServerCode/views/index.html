@@ -1,0 +1,22 @@
+<html>
+<title>Hello</title>
+<head>
+    <!-- <link rel="stylesheet" type="text/css" href="/css/main.css" /> -->
+</head>
+<body>
+<h1>GSK Main Side</h1>
+
+</body>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+console.log("Hello");
+// Connection opened
+const socket = io();
+
+socket.on("connect", () => {
+  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+});
+
+</script>
+</html>
