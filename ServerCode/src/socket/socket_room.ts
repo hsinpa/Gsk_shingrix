@@ -23,16 +23,21 @@ export default class SocketRoom {
         this.m_room.host_id = id;
 
         this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame,
-            JSON.stringify(this.m_room)
+            JSON.stringify({room : this.m_room, participate: this.m_users.values})
         );
     }
 
     EndGame() {
         this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.ForceEndGame);
         this.m_users.clear();
+        this.m_room.end_time = 0;
+        this.m_room.start_time = 0;
     }
 
     JoinRoom(socket: Socket, id: string, name: string) {
+
+        if (this.m_room.start_time == 0 && this.m_room.start_time == 0) return;
+
         let new_user =  {socket_id: id, name : name, score: 0, user_type: UserStatus.Participants };
         this.m_users.setValue(id, new_user);
         socket.join(UniversalParameter.RoomName);
