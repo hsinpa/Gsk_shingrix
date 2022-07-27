@@ -2,11 +2,13 @@ import { RoomComponentType, UserComponentType, UserStatus } from "./socket_struc
 import { SocketEvent, UniversalParameter } from "../Utility/Flag/EventFlag";
 import { Server, Socket } from "socket.io";
 import { Dictionary } from "typescript-collections";
+import {GenerateRandomString} from '../Utility/GeneralMethod';
 
 export default class SocketRoom {
 
     private m_users :Dictionary<string, UserComponentType> = new Dictionary<string, UserComponentType>();
 
+    private m_session_id: string;
     private m_io : Server;
     private m_room : RoomComponentType;
 
@@ -16,6 +18,7 @@ export default class SocketRoom {
     }
 
     StartGame(id: string)  {
+        this.m_session_id = GenerateRandomString(8);
         this.SetRoomTimer(Date.now());
         this.m_room.host_id = id;
 
@@ -26,6 +29,7 @@ export default class SocketRoom {
 
     EndGame() {
         this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.ForceEndGame);
+        this.m_users.clear();
     }
 
     JoinRoom(socket: Socket, id: string, name: string) {

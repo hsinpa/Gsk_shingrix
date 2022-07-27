@@ -16,6 +16,8 @@ export const OnSocketEvent = {
     StartGame : "event@on_start_game",
     ForceEndGame : "event@on_end_game",
 
+    Join : "event@on_join_game",
+    
     Score : "event@on_score",
 }
 

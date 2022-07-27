@@ -10,13 +10,55 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
-console.log("Hello");
 // Connection opened
 const socket = io();
+let game_start = false;
+let update_time = 1;
+let record_time = 0;
+let score = 0;
+
+//event@on_score
 
 socket.on("connect", () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+
+  let join_message = JSON.stringify({name: (Math.floor(Math.random() * 1000)).toString() });
+  socket.emit("event@on_join_game", join_message);
+
+  //update_score();
 });
+
+socket.on("event@start_game", () => {
+  game_start = true;
+  update_score();
+});
+
+socket.on("event@end_game", () => {
+  game_start = false;
+  console.log("event@end_game");
+});
+
+function update_score() {
+  if (!game_start) return;
+
+  let current_second = Date.now() / 1000;
+
+  if (current_second <  record_time) {
+    requestAnimationFrame(update_score);
+    return;
+  }
+
+  let random_score = Math.floor(Math.random() * 10);
+
+  score += random_score;
+  record_time = current_second + update_time;
+  console.log(score);
+
+  let socket_data = JSON.stringify({score : score});
+  socket.emit("event@on_score", socket_data);
+  
+  requestAnimationFrame(update_score);
+}
 
 </script>
 </html>

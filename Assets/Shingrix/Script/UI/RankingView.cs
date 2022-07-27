@@ -13,15 +13,10 @@ namespace Hsinpa.Ranking {
         private List<RankingItemView> items = new List<RankingItemView>();
         private const int max_ranking_view = 10;
 
-        private void Awake()
-        {
+        public void PrepareItemView() {
             _rectTran = GetComponent<RectTransform>();
 
             PrepareMaxRankView(count: max_ranking_view);
-        }
-
-        public void Insert() { 
-        
         }
 
         public void SetRankingData(List<TypeStruct.RankStruct> sortedStructs) {
