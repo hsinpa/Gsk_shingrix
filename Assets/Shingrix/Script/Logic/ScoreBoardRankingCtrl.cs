@@ -29,14 +29,14 @@ namespace Hsinpa.Ctrl {
             _socketIOManager = new WebSocket.SocketIOManager(new System.Uri(TypeStruct.URL.SocketDev));
             _rankModel = new RankModel(_socketIOManager);
 
-            var g_structs = AlgorithmTesting.GenQuickSortData(20);
-            g_structs = g_structs.OrderByDescending(x => x.Value).ToList();
+            //var g_structs = AlgorithmTesting.GenQuickSortData(20);
+            //g_structs = g_structs.OrderByDescending(x => x.Value).ToList();
 
             rankingView.PrepareItemView();
-            rankingView.SetRankingData(g_structs);
+            //rankingView.SetRankingData(g_structs);
 
-            int total_score = g_structs.Sum(x => x.Value);
-            totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, total_score);
+            //int total_score = g_structs.Sum(x => x.Value);
+            //totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, total_score);
 
             _rankModel.OnDataUpdateEvent += OnRankDataUpdate;
 
@@ -46,6 +46,8 @@ namespace Hsinpa.Ctrl {
         private void OnRankDataUpdate(List<TypeStruct.RankStruct> rankStructs) {
             rankingView.SetRankingData(rankStructs);
 
+
+
             int total_score = rankStructs.Sum(x => x.Value);
             totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, total_score);
         }
@@ -53,6 +55,7 @@ namespace Hsinpa.Ctrl {
         private void OnStartBtnClick() {
             _socketIOManager.Emit(TypeStruct.SocketEvent.StartGame);
             simpleCanvasView.ShowMainPage();
+            totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, 0);
         }
 
 

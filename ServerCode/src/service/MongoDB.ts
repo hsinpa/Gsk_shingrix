@@ -12,7 +12,7 @@ class MongoDB {
 
     private scoreSchema : typeof moogoose.Model;
 
-    private scoreModel : ScoreModel;
+    scoreModel : ScoreModel;
 
     constructor(env : NodeJS.ProcessEnv, callback :  (db : MongoDB )=> void) {
         this.config = {

@@ -356,7 +356,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u6BCF\u5206\u9418\u5168\u5834\u4EE5\u5354\u52A9\n<b><size=82><color=#B50003>350</color></size></b>\u4EBA\n\u9810\u9632\u5E36\u72C0\u76B0\u75B9\u767C\u751F"
+  m_text: "\u6BCF\u5206\u9418\u5168\u5834\u4EE5\u5354\u52A9\n<b><size=82><color=#B50003>0</color></size></b>\u4EBA\n\u9810\u9632\u5E36\u72C0\u76B0\u75B9\u767C\u751F"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d0e99a88d1b109048a5ccc25b82c8792, type: 2}
   m_sharedMaterial: {fileID: -3133792655807235064, guid: d0e99a88d1b109048a5ccc25b82c8792, type: 2}
@@ -744,7 +744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit

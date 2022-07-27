@@ -23,7 +23,6 @@ dotenv.config();
 const env = process.env;
 const socketMain = new SocketMain();
 
-
 let rootFolder : string = join(__dirname, '..',);
 
 app.use(koa_static(
@@ -48,15 +47,13 @@ router.get('/', async function (ctx:any, next:any) {
   await ctx.render('index', {title: "HSINPA"});
 });
 
-
 // @ts-ignore
 var server = http.createServer( app.callback());
-
 
 const mongodb = new MongoDB(env, (db: MongoDB) => {
   console.log("Connect to database");
 
-  socketMain.Init(server);
+  socketMain.Init(server, db.scoreModel);
 
   server.listen(3000, 'localhost', function () {
     console.log(`Application worker ${process.pid} started...`);

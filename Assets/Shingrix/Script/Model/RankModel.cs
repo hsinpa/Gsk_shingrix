@@ -20,14 +20,18 @@ namespace Hsinpa.Model
         public RankModel(SocketIOManager socketIOManager) {
             _socketIOManager = socketIOManager;
 
-            _socketIOManager.socket.On<TypeStruct.UserComponentType>(TypeStruct.SocketEvent.UpdateUserInfo, OnUpdateUserSocketEvent);
+            _socketIOManager.socket.On<string>(TypeStruct.SocketEvent.UpdateUserInfo, OnUpdateUserSocketEvent);
         }
 
-        private void OnUpdateUserSocketEvent(TypeStruct.UserComponentType userComponentType) {
+        private void OnUpdateUserSocketEvent(string json_string) {
+            Debug.Log(json_string);
+
+            TypeStruct.UserComponentType userComponentType = JsonUtility.FromJson<TypeStruct.UserComponentType>(json_string);
+
 
             if (_rankStructsDict.TryGetValue(userComponentType.socket_id, out var rankStruct))
             {
-                rankStruct.SetValue(rankStruct.Value);
+                rankStruct.SetValue(userComponentType.score);
             }
             else {
                 TypeStruct.RankStruct newRankItem = new TypeStruct.RankStruct();

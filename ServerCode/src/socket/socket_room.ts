@@ -3,6 +3,7 @@ import { SocketEvent, UniversalParameter } from "../Utility/Flag/EventFlag";
 import { Server, Socket } from "socket.io";
 import { Dictionary } from "typescript-collections";
 import {GenerateRandomString} from '../Utility/GeneralMethod';
+import ScoreModel from "../service/ScoreModel";
 
 export default class SocketRoom {
 
@@ -11,9 +12,15 @@ export default class SocketRoom {
     private m_session_id: string;
     private m_io : Server;
     private m_room : RoomComponentType;
+    private m_score_model : ScoreModel;
 
-    constructor(io: Server) {     
+    private IsGameStart() {
+        return this.m_room.start_time > 0 && this.m_room.end_time > 0;
+    }
+
+    constructor(io: Server, score_model : ScoreModel) {     
         this.m_io = io;
+        this.m_score_model = score_model;
         this.m_room = {room_id: UniversalParameter.RoomName, host_id: "", start_time: 0, end_time: 0}
     }
 
@@ -22,27 +29,26 @@ export default class SocketRoom {
         this.SetRoomTimer(Date.now());
         this.m_room.host_id = id;
 
-        this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame,
-            JSON.stringify({room : this.m_room, participate: this.m_users.values})
-        );
+        this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame, JSON.stringify({room : this.m_room}));
     }
 
     EndGame() {
         this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.ForceEndGame);
+        this.m_score_model.insert(this.m_session_id, this.m_users.values());
         this.m_users.clear();
         this.m_room.end_time = 0;
         this.m_room.start_time = 0;
     }
 
     JoinRoom(socket: Socket, id: string, name: string) {
-
-        if (this.m_room.start_time == 0 && this.m_room.start_time == 0) return;
-
         let new_user =  {socket_id: id, name : name, score: 0, user_type: UserStatus.Participants };
         this.m_users.setValue(id, new_user);
         socket.join(UniversalParameter.RoomName);
 
         this.EmitUserType(SocketEvent.UpdateUser, new_user);
+
+        if (this.IsGameStart())
+            socket.emit(SocketEvent.StartGame, JSON.stringify({room : this.m_room}));
     }
 
     UpdateScore(id: string, score: number) {

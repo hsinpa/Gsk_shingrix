@@ -3,6 +3,7 @@ import SocketListener from "./emit_receive/socket_listener";
 import SocketRoom from "./socket_room";
 import * as http from 'http';
 import { Server } from "socket.io";
+import ScoreModel from "../service/ScoreModel";
 
 export default class SocketMain {
 
@@ -13,7 +14,7 @@ export default class SocketMain {
 
     }
 
-    public Init(app : http.Server) {
+    public Init(app : http.Server, score_model : ScoreModel) {
         let io = new Server(app,
             {
                 cors: {
@@ -22,7 +23,7 @@ export default class SocketMain {
               }
         );
         
-        this.m_socket_room = new SocketRoom(io);
+        this.m_socket_room = new SocketRoom(io, score_model);
         this.m_socket_listener = new SocketListener(this.m_socket_room);
         this.SetBasicEventListener(io);
     }

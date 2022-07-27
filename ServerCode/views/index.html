@@ -16,26 +16,30 @@ let game_start = false;
 let update_time = 1;
 let record_time = 0;
 let score = 0;
+let join_message = JSON.stringify({name: (Math.floor(Math.random() * 1000)).toString() });
 
 //event@on_score
 
 socket.on("connect", () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
 
-  let join_message = JSON.stringify({name: (Math.floor(Math.random() * 1000)).toString() });
   socket.emit("event@on_join_game", join_message);
 
   //update_score();
 });
 
 socket.on("event@start_game", () => {
+  console.log("Start game");
   game_start = true;
+  score = 0;
   update_score();
 });
 
 socket.on("event@end_game", () => {
   game_start = false;
   console.log("event@end_game");
+
+  socket.emit("event@on_join_game", join_message);
 });
 
 function update_score() {

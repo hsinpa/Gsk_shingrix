@@ -1,6 +1,6 @@
 import { UserComponentType } from "../socket_struct";
 import SocketRoom from "../socket_room";
-import { OnSocketEvent } from "../../Utility/Flag/EventFlag";
+import { OnSocketEvent, UniversalParameter } from "../../Utility/Flag/EventFlag";
 import { Server, Socket } from "socket.io";
 
 export default class SocketListener {
@@ -16,6 +16,7 @@ export default class SocketListener {
 
         socket.on(OnSocketEvent.StartGame, function () {
             console.log("Start game");
+            socket.join(UniversalParameter.RoomName);
             self.m_socket_room.StartGame(socket.id);
         });
 
