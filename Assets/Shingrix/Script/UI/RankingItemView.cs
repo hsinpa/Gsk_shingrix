@@ -36,13 +36,15 @@ namespace Hsinpa.Ranking
 
         private Ranking.TypeStruct.RankStruct _rankStruct;
 
-        public void Start()
-        {
-            
-        }
 
         public void SetName(string name) {
             title.text = name;
+        }
+
+
+        public void SetScore(string value)
+        {
+            score.text = value;
         }
 
         public void SetData(Ranking.TypeStruct.RankStruct rankStruct) {
@@ -60,8 +62,8 @@ namespace Hsinpa.Ranking
 
             background.color = color;
 
-            title.text = rankStruct.name;
-            score.text = rankStruct.Value.ToString();
+            SetName(rankStruct.name);
+            SetScore(rankStruct.Value.ToString());
 
             if (rankStruct.Index >= 3) {
                 layoutElement.preferredHeight = defaultHeight * 0.95f;

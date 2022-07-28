@@ -1,7 +1,8 @@
+import { MongoBulkWriteError } from 'mongodb';
 import * as moogoose from 'mongoose';
 import { UserComponentType } from '../socket/socket_struct';
 
-interface score_schema_type { name: string; _id: string, session: string, score :number }
+interface score_schema_type { name: string; socket_id: string, session: string, score :number }
 class ScoreModel {
 
     _scoreSchema : typeof moogoose.Model;
@@ -13,10 +14,13 @@ class ScoreModel {
     insert(session_id: string, users: UserComponentType[]) {
         let filter_users = users.filter(x=>x.score > 0);
         let select_users = filter_users.map(x => <score_schema_type>
-           {name: x.name, session: session_id, _id: x.socket_id, score:x.score}
+           {name: x.name, session: session_id, socket_id: x.socket_id, score:x.score}
         );
-
-        this._scoreSchema.insertMany(select_users);
+        try {
+         this._scoreSchema.insertMany(select_users);
+      } catch (e: any) {
+         console.log(e);
+      } 
     }
 
     find_ranking(user_id: string) {
@@ -32,7 +36,7 @@ class ScoreModel {
                   }
                }
             },
-            {$match : {_id : (user_id)}},
+            {$match : {socket_id : user_id}},
          ] )
     }
 }

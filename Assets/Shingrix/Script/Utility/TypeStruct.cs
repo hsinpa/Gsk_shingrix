@@ -73,7 +73,7 @@ namespace Hsinpa.Ranking {
 
         public class StaticText {
             public const string TotalScore = "每分鐘全場以協助<br><b><size=82><color=#B50003>{0}</color></size></b>人<br>預防帶狀皰疹發生";
-            public const string Timer = "Count down in<br>< size = 42 >< color =#B50003>{0}</color></size>  secs";
+            public const string Timer = "Count down in<br><size=42><color=#B50003>{0}</color></size>  secs";
         }
     }
 }

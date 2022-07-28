@@ -13,6 +13,10 @@ namespace Hsinpa.UI
         [SerializeField]
         TextMeshProUGUI timer;
 
+        [SerializeField]
+        GameObject timeup_panel;
+
+
         private DateTime _endTimeStamp;
         private DateTime _startTimeStamp;
 
@@ -25,13 +29,18 @@ namespace Hsinpa.UI
             timer.text = string.Format(TypeStruct.StaticText.Timer, "00");
         }
 
+        public void ShowTimeUp(bool is_show) {
+            timeup_panel.SetActive(is_show);
+        }
+
         private void Update()
         {
             if (this._endTimeStamp == DateTime.MinValue) return;
 
             TimeSpan t = this._endTimeStamp - DateTime.UtcNow;
 
-            timer.text = string.Format(TypeStruct.StaticText.Timer,t.Seconds);
+            int second_clamp = Math.Clamp(t.Seconds, 0, t.Seconds);
+            timer.text = string.Format(TypeStruct.StaticText.Timer, second_clamp);
 
             if (t.Seconds < 0)
             {

@@ -16,6 +16,7 @@ namespace Hsinpa.Model
 
         private Dictionary<string, TypeStruct.RankStruct> _rankStructsDict = new Dictionary<string, TypeStruct.RankStruct>();
 
+        public List<TypeStruct.RankStruct> SortedList => _rankStructsDict.Values.ToList().OrderByDescending(x => x.Value).ToList();
 
         public RankModel(SocketIOManager socketIOManager) {
             _socketIOManager = socketIOManager;
@@ -46,6 +47,10 @@ namespace Hsinpa.Model
 
             if (OnDataUpdateEvent != null)
                 OnDataUpdateEvent(sortedScores);
+        }
+
+        public void Dispose() {
+            _rankStructsDict.Clear();
         }
 
     }

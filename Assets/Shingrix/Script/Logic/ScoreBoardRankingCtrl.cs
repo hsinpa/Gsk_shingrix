@@ -27,7 +27,7 @@ namespace Hsinpa.Ctrl {
             simpleCanvasView.ShowFrontPage();
 
             _socketIOManager = new WebSocket.SocketIOManager(new System.Uri(TypeStruct.URL.SocketDev));
-            _socketIOManager.socket.On<TypeStruct.RoomComponentType>(TypeStruct.SocketEvent.ReceiveStartGame, OnGameStartEvent);
+            _socketIOManager.socket.On<string>(TypeStruct.SocketEvent.ReceiveStartGame, OnGameStartEvent);
 
             _rankModel = new RankModel(_socketIOManager);
 
@@ -43,6 +43,8 @@ namespace Hsinpa.Ctrl {
             _rankModel.OnDataUpdateEvent += OnRankDataUpdate;
 
             simpleCanvasView.Front_Page.SetStartBtnAction(OnStartBtnClick);
+            simpleCanvasView.Main_Page.OnTimeUpEvent += OnTimeup;
+            simpleCanvasView.Rank_Page.SetRestartAction(() => simpleCanvasView.ShowFrontPage());
         }
 
         private void OnRankDataUpdate(List<TypeStruct.RankStruct> rankStructs)
@@ -53,9 +55,23 @@ namespace Hsinpa.Ctrl {
             totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, total_score);
         }
 
-        private void OnGameStartEvent(TypeStruct.RoomComponentType roomStruct) {
+        private void OnGameStartEvent(string raw_json_string) {
+            Debug.Log(raw_json_string);
+            TypeStruct.RoomComponentType roomStruct = JsonUtility.FromJson<TypeStruct.RoomComponentType>(raw_json_string);
             simpleCanvasView.Main_Page.SetTimer(roomStruct.end_time);
             simpleCanvasView.ShowMainPage();
+            simpleCanvasView.Main_Page.ShowTimeUp(false);
+        }
+
+        private void OnTimeup() {
+            simpleCanvasView.Main_Page.ShowTimeUp(true);
+            _socketIOManager.Emit(TypeStruct.SocketEvent.TerminateGame);
+
+            _ = Hsinpa.Utility.UtilityFunc.DoDelayWork(5, () =>
+            {
+                simpleCanvasView.ShowRankPage();
+                simpleCanvasView.Rank_Page.SetRanking(_rankModel.SortedList);
+            });
         }
 
         private void OnStartBtnClick() {

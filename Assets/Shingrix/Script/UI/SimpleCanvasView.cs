@@ -14,15 +14,28 @@ namespace Hsinpa.UI
         private MainPageView main_page;
         public MainPageView Main_Page => main_page;
 
+        [SerializeField]
+        private RankPageView rank_page;
+        public RankPageView Rank_Page => rank_page;
+
         public void ShowFrontPage() {
             main_page.gameObject.SetActive(false);
             front_page.gameObject.SetActive(true);
+            rank_page.gameObject.SetActive(false);
         }
 
         public void ShowMainPage()
         {
             main_page.gameObject.SetActive(true);
             front_page.gameObject.SetActive(false);
+            rank_page.gameObject.SetActive(false);
+        }
+
+        public void ShowRankPage()
+        {
+            main_page.gameObject.SetActive(false);
+            front_page.gameObject.SetActive(false);
+            rank_page.gameObject.SetActive(true);
         }
 
     }
