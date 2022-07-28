@@ -38,6 +38,15 @@ namespace Hsinpa.Ranking {
             public int? user_type;
         }
 
+        [System.Serializable]
+        public struct RoomComponentType
+        {
+            public string room_id;
+            public string host_id;
+            public long start_time;
+            public long end_time;
+        }
+
         public class SocketEvent
         {
             public const string OnConnect = "connect";
@@ -49,6 +58,8 @@ namespace Hsinpa.Ranking {
 
             public const string StartGame = "event@on_start_game";
             public const string TerminateGame = "event@on_end_game";
+
+            public const string ReceiveStartGame = "event@start_game";
 
             public const string Reconnect = "event@reconnect";
             public const string Disconnect = "event@disconnect";
@@ -62,6 +73,7 @@ namespace Hsinpa.Ranking {
 
         public class StaticText {
             public const string TotalScore = "每分鐘全場以協助<br><b><size=82><color=#B50003>{0}</color></size></b>人<br>預防帶狀皰疹發生";
+            public const string Timer = "Count down in<br>< size = 42 >< color =#B50003>{0}</color></size>  secs";
         }
     }
 }

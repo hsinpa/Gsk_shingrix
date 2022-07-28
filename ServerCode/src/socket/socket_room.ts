@@ -29,7 +29,7 @@ export default class SocketRoom {
         this.SetRoomTimer(Date.now());
         this.m_room.host_id = id;
 
-        this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame, JSON.stringify({room : this.m_room}));
+        this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame, JSON.stringify(this.m_room));
     }
 
     EndGame() {

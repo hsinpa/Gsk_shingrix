@@ -8,11 +8,13 @@ import * as fs from 'fs';
 
 import * as koa_static from 'koa-static';
 import * as Router from 'koa-router';
+import {SetRouter} from './routes';
 
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 
 const router = new Router();
+
 const views = require('koa-views');
 
 const app = new Koa();
@@ -39,19 +41,12 @@ app.use(bodyParser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-router.get('/', async function (ctx:any, next:any) {
-  ctx.state = {
-    title: 'HSINPA'
-  };
-  console.log("Hello world");
-  await ctx.render('index', {title: "HSINPA"});
-});
-
 // @ts-ignore
 var server = http.createServer( app.callback());
 
 const mongodb = new MongoDB(env, (db: MongoDB) => {
   console.log("Connect to database");
+  SetRouter(router, db);
 
   socketMain.Init(server, db.scoreModel);
 

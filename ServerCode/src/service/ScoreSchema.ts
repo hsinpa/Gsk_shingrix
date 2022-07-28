@@ -1,7 +1,7 @@
 import {Schema, model} from 'mongoose';
 
 const score_schema = new Schema({
-    socket_id : String,
+    _id : String,
     name : String,
     score : Number,
     session: String,
