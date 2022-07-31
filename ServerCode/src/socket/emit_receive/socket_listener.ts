@@ -1,6 +1,6 @@
 import { UserComponentType } from "../socket_struct";
 import SocketRoom from "../socket_room";
-import { OnSocketEvent, UniversalParameter } from "../../Utility/Flag/EventFlag";
+import { OnSocketEvent, UniversalParameter, SocketEvent } from "../../Utility/Flag/EventFlag";
 import { Server, Socket } from "socket.io";
 
 export default class SocketListener {
@@ -37,6 +37,10 @@ export default class SocketListener {
             let socket_id = socket.id;
             
             self.m_socket_room.UpdateScore(socket_id, score);
+        });
+
+        socket.on(OnSocketEvent.UserCountSync, function () {
+            socket.emit(SocketEvent.UserCountSync, JSON.stringify({count: self.m_socket_room.user_count}) );
         });
     }
 }

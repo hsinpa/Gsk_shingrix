@@ -18,6 +18,8 @@ namespace Hsinpa.WebSocket {
 
         public bool IsConnected => (socket != null && socket.IsOpen);
 
+        public System.Action<string> OnSocketConnectEvent;
+
         public SocketIOManager(Uri uri)
         {
             _socketManager = new SocketManager(uri);
@@ -31,6 +33,9 @@ namespace Hsinpa.WebSocket {
         void OnConnectEvent()
         {
             Debug.Log("Original Socket " + socket_id);
+
+            if (OnSocketConnectEvent != null) OnSocketConnectEvent(socket_id);
+
         }
 
         public void Emit(string event_id, string raw_json = "{}") {

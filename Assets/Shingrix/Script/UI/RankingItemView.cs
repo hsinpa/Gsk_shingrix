@@ -47,7 +47,7 @@ namespace Hsinpa.Ranking
             score.text = value;
         }
 
-        public void SetData(Ranking.TypeStruct.RankStruct rankStruct) {
+        public void SetData(Ranking.TypeStruct.RankStruct rankStruct, System.Func<int, Sprite> searchSpriteMethod) {
 
             if (defaultHeight == 0)
                 defaultHeight = layoutElement.preferredHeight;
@@ -58,16 +58,16 @@ namespace Hsinpa.Ranking
 
             this._rankStruct = rankStruct;
 
-            Color color = RankingView.GetColorByIndex(this._rankStruct.Index);
+            Sprite color = searchSpriteMethod(this._rankStruct.Index);
 
-            background.color = color;
+            background.sprite = color;
 
             SetName(rankStruct.name);
             SetScore(rankStruct.Value.ToString());
 
             if (rankStruct.Index >= 3) {
-                layoutElement.preferredHeight = defaultHeight * 0.95f;
-                layoutElement.preferredWidth = defaultWidth * 0.85f;
+                layoutElement.preferredHeight = defaultHeight * 0.9f;
+                layoutElement.preferredWidth = defaultWidth * 0.7f;
             }
         }
     }

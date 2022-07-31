@@ -7,6 +7,7 @@ export const SocketEvent = {
     StartGame : "event@start_game",
     ForceEndGame : "event@end_game",
 
+    UserCountSync : "event@count_sync",
     Join : "event@join",
     Disconnect : "event@disconnect",
     Connect : "event@connect",
@@ -15,6 +16,7 @@ export const SocketEvent = {
 export const OnSocketEvent = {
     StartGame : "event@on_start_game",
     ForceEndGame : "event@on_end_game",
+    UserCountSync : "event@on_count_sync",
 
     Join : "event@on_join_game",
     

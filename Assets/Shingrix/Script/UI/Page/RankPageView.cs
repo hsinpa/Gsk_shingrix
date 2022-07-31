@@ -28,22 +28,31 @@ namespace Hsinpa.UI
         public void SetRanking(List<TypeStruct.RankStruct> rank_list) {
             if (rank_list == null) return;
 
-            if (rank_list.Count > 0) {
-                rank_1.SetName(rank_list[0].name);
-                rank_1.SetScore(rank_list[0].Value.ToString());
+            try
+            {
+                rank_1.gameObject.SetActive(false);
+                rank_2.gameObject.SetActive(false);
+                rank_3.gameObject.SetActive(false);
+
+                TypeStruct.RankStruct fallbackStruct = default(TypeStruct.RankStruct);
+
+                AssignRanking(rank_1, (rank_list.Count > 0) ? rank_list[0] : fallbackStruct);
+                AssignRanking(rank_2, (rank_list.Count > 1) ? rank_list[1] : fallbackStruct);
+                AssignRanking(rank_3, (rank_list.Count > 2) ? rank_list[2] : fallbackStruct);
+            }
+            catch (System.Exception e) {
+                Debug.Log(e.Message);
+            }
+        }
+
+        private void AssignRanking(RankingItemView rankingItemView, TypeStruct.RankStruct rankStruct) {
+            rankingItemView.gameObject.SetActive(rankStruct.id != null);
+            if (rankStruct.id == null) {
+                return;
             }
 
-            if (rank_list.Count > 1)
-            {
-                rank_2.SetName(rank_list[1].name);
-                rank_2.SetScore(rank_list[1].Value.ToString());
-            }
-
-            if (rank_list.Count > 2)
-            {
-                rank_3.SetName(rank_list[2].name);
-                rank_3.SetScore(rank_list[2].Value.ToString());
-            }
+            rankingItemView.SetName(rankStruct.name);
+            rankingItemView.SetScore(rankStruct.Value.ToString());
         }
 
     }

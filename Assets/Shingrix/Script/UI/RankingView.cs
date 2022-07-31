@@ -8,6 +8,15 @@ namespace Hsinpa.Ranking {
         [SerializeField]
         private RankingItemView rankingItemViewPrefab;
 
+        [SerializeField]
+        private Sprite rank_one_sprite;
+        [SerializeField]
+        private Sprite rank_two_sprite;
+        [SerializeField]
+        private Sprite rank_three_sprite;
+        [SerializeField]
+        private Sprite rank_other_sprite;
+
         private RectTransform _rectTran;
 
         private List<RankingItemView> items = new List<RankingItemView>();
@@ -21,8 +30,7 @@ namespace Hsinpa.Ranking {
 
         public void SetRankingData(List<TypeStruct.RankStruct> sortedStructs) {
 
-            int s_count = sortedStructs.Count; 
-
+            int s_count = sortedStructs.Count;
             for (int i = 0; i < max_ranking_view; i++) {
 
                 bool isViewValid = i < s_count;
@@ -33,7 +41,7 @@ namespace Hsinpa.Ranking {
                     continue;
 
                 sortedStructs[i].SetIndex(i);
-                items[i].SetData(sortedStructs[i]);
+                items[i].SetData(sortedStructs[i], GetSpriteByIndex);
             }
         }
 
@@ -49,6 +57,13 @@ namespace Hsinpa.Ranking {
         //    }
         //}
 
+        public void ResetAll()
+        {
+            foreach (var v in items)
+            {
+                v.gameObject.SetActive(false);
+            }
+        }
 
         private void PrepareMaxRankView(int count) {
             Utility.UtilityFunc.ClearChildObject(_rectTran);
@@ -63,16 +78,17 @@ namespace Hsinpa.Ranking {
             }
         }
 
-        public static Color GetColorByIndex(int index) {
+
+        public Sprite GetSpriteByIndex(int index) {
             switch (index) {
                 case 0:
-                    return Color.yellow;
+                    return rank_one_sprite;
                 case 1:
-                    return Color.green;
+                    return rank_two_sprite;
                 case 2:
-                    return Color.blue;
+                    return rank_three_sprite;
                 default:
-                    return Color.gray;
+                    return rank_other_sprite;
             }
         }
 
