@@ -16,7 +16,6 @@ export function SetRouter(router : Router, mongodb:MongoDB) {
 
     router.get('/rank/:id', async function (ctx:any, next:any) {
         let r = (await mongodb.scoreModel.find_ranking(ctx.params.id));
-        ///console.log(r);
 
         r = r.sort(function (a, b) {
           return a.ranking - b.ranking;

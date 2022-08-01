@@ -27,7 +27,7 @@ class ScoreModel {
         return this._scoreSchema.aggregate( [
             {
                $setWindowFields: {
-                  partitionBy: "$session",
+                  //partitionBy: "$socket_id",
                   sortBy: { score: -1 },
                   output: {
                      ranking: {
