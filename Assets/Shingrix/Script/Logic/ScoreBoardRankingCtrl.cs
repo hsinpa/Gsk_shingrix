@@ -23,6 +23,9 @@ namespace Hsinpa.Ctrl {
         [SerializeField]
         private TMPro.TextMeshProUGUI totalScoreTextEnd;
 
+        [SerializeField]
+        private UnityEngine.UI.Button restartBtn;
+
         private WebSocket.SocketIOManager _socketIOManager;
         private RankModel _rankModel;
 
@@ -52,6 +55,8 @@ namespace Hsinpa.Ctrl {
             simpleCanvasView.Front_Page.SetStartBtnAction(OnStartBtnClick);
             simpleCanvasView.Main_Page.OnTimeUpEvent += OnTimeup;
             simpleCanvasView.Rank_Page.SetRestartAction(() => simpleCanvasView.ShowFrontPage());
+
+            Hsinpa.Utility.UtilityFunc.SetSimpleBtnEvent(restartBtn, () => simpleCanvasView.ShowFrontPage());
         }
 
         private void OnPlayerCountUpdate(int p_count)
@@ -90,11 +95,12 @@ namespace Hsinpa.Ctrl {
             await Task.Delay(System.TimeSpan.FromSeconds(3));
 
             simpleCanvasView.ShowEndTransitionPage();
-
-            await Task.Delay(System.TimeSpan.FromSeconds(8));
             simpleCanvasView.Main_Page.ShowTimeUp(false);
 
-            simpleCanvasView.ShowFrontPage();
+            //await Task.Delay(System.TimeSpan.FromSeconds(8));
+            //simpleCanvasView.Main_Page.ShowTimeUp(false);
+
+            //simpleCanvasView.ShowFrontPage();
             //simpleCanvasView.ShowRankPage();
             //simpleCanvasView.Rank_Page.SetRanking(_rankModel.SortedList);
             //_rankModel.Dispose();
