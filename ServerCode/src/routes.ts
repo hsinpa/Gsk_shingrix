@@ -14,9 +14,9 @@ export function SetRouter(router : Router, mongodb:MongoDB) {
       await ctx.render('main', {title: "HSINPA"});
     });
 
-    router.get('/rank/:id', async function (ctx:any, next:any) {
-        let r = (await mongodb.scoreModel.find_ranking(ctx.params.id));
-
+    router.get('/rank/:id/:game_id', async function (ctx:any, next:any) {
+        let r = (await mongodb.scoreModel.find_ranking(ctx.params.id, parseInt(ctx.params.game_id)));
+        console.log(r);
         r = r.sort(function (a, b) {
           return a.ranking - b.ranking;
         });

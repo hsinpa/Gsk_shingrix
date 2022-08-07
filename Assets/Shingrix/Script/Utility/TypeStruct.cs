@@ -43,6 +43,7 @@ namespace Hsinpa.Ranking {
         {
             public string room_id;
             public string host_id;
+            public int game_id;
             public long start_time;
             public long end_time;
         }
@@ -69,13 +70,15 @@ namespace Hsinpa.Ranking {
 
         public class URL
         {
-            public const string SocketProd = "http://34.170.230.188:81/";
+            public const string SocketProd = "https://34.170.230.188/";
             public const string SocketDev = "http://localhost:3000";
         }
 
         public class StaticText {
             public const string FrontPageWaitingPerson = "等待人數: {0}";
             public const string TotalScore = "每分鐘全場以協助<br><b><size=82><color=#B50003>{0}</color></size></b>人<br>預防帶狀皰疹發生";
+            public const string TotalScoreEnd = "{0}<size=40>人</size>";
+
             public const string Timer = "Count down in<br><size=42><color=#B50003>{0}</color></size>  secs";
         }
     }

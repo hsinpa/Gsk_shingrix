@@ -20,15 +20,17 @@ namespace Hsinpa.Ctrl {
         [SerializeField]
         private TMPro.TextMeshProUGUI totalScoreText;
 
+        [SerializeField]
+        private TMPro.TextMeshProUGUI totalScoreTextEnd;
+
         private WebSocket.SocketIOManager _socketIOManager;
         private RankModel _rankModel;
 
         void Start()
         {
-
             simpleCanvasView.ShowFrontPage();
 
-            _socketIOManager = new WebSocket.SocketIOManager(new System.Uri(TypeStruct.URL.SocketDev));
+            _socketIOManager = new WebSocket.SocketIOManager(new System.Uri(TypeStruct.URL.SocketProd));
             _socketIOManager.socket.On<string>(TypeStruct.SocketEvent.ReceiveStartGame, OnGameStartEvent);
             _socketIOManager.OnSocketConnectEvent += (string id) => {
                 _socketIOManager.Emit(TypeStruct.SocketEvent.Request_UserCountSync);
@@ -64,6 +66,7 @@ namespace Hsinpa.Ctrl {
 
             int total_score = rankStructs.Sum(x => x.Value);
             totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, total_score);
+            totalScoreTextEnd.text = string.Format(TypeStruct.StaticText.TotalScoreEnd, total_score);
         }
 
         private void OnGameStartEvent(string raw_json_string) {
@@ -88,15 +91,16 @@ namespace Hsinpa.Ctrl {
 
             simpleCanvasView.ShowEndTransitionPage();
 
-            await Task.Delay(System.TimeSpan.FromSeconds(5));
+            await Task.Delay(System.TimeSpan.FromSeconds(8));
+            simpleCanvasView.Main_Page.ShowTimeUp(false);
 
-            simpleCanvasView.ShowRankPage();
-            simpleCanvasView.Rank_Page.SetRanking(_rankModel.SortedList);
-            _rankModel.Dispose();
+            simpleCanvasView.ShowFrontPage();
+            //simpleCanvasView.ShowRankPage();
+            //simpleCanvasView.Rank_Page.SetRanking(_rankModel.SortedList);
+            //_rankModel.Dispose();
         }
 
         private async void OnStartBtnClick() {
-
             rankingView.ResetAll();
             simpleCanvasView.Main_Page.ResetTimer();
             simpleCanvasView.ShowMainPage();
@@ -104,7 +108,7 @@ namespace Hsinpa.Ctrl {
 
             await Task.Delay(System.TimeSpan.FromSeconds(3));
 
-            _socketIOManager.Emit(TypeStruct.SocketEvent.StartGame);
+            _socketIOManager.Emit(TypeStruct.SocketEvent.StartGame, "{\"game_id\" : " + simpleCanvasView.Front_Page.Tab.Index + "}");
             //simpleCanvasView.ShowMainPage();
             totalScoreText.text = string.Format(TypeStruct.StaticText.TotalScore, 0);
 

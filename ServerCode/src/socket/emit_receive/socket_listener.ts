@@ -14,10 +14,11 @@ export default class SocketListener {
     RegisterEvent(socket: Socket) {
         let self = this;
 
-        socket.on(OnSocketEvent.StartGame, function () {
+        socket.on(OnSocketEvent.StartGame, function (data : string) {
             console.log("Start game");
+            let json = JSON.parse(data);
             socket.join(UniversalParameter.RoomName);
-            self.m_socket_room.StartGame(socket.id);
+            self.m_socket_room.StartGame(socket.id, json["game_id"]);
         });
 
         socket.on(OnSocketEvent.ForceEndGame, function (data : string) {

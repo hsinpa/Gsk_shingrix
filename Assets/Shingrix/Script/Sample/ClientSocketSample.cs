@@ -21,7 +21,7 @@ namespace Hsinpa.ClientSample {
         public System.Action<string> OnSocketConnectEvent;
 
         private string display_name;
-        private const string domain = "http://34.170.230.188:81";
+        private const string domain = "https://34.170.230.188/";
 
         public ClientSocketSample()
         {
@@ -35,7 +35,7 @@ namespace Hsinpa.ClientSample {
                 EmitJoinRoom(display_name);
             });
 
-            socket.On("event@start_game", EmitStartGameEvent);
+            socket.On<string>("event@start_game", EmitStartGameEvent);
             socket.On("event@end_game", EmitEndGameEvent);
         }
 
@@ -44,8 +44,8 @@ namespace Hsinpa.ClientSample {
         /// If -1 => socket id is not exist
         /// </summary>
         /// <returns></returns>
-        public async Task<int> GetRanking() {
-            var request = new HTTPRequest(new Uri(domain + "/rank/"+ socket_id));
+        public async Task<int> GetRanking(int game_id) {
+            var request = new HTTPRequest(new Uri(domain + "/rank/"+ socket_id +"/"+ game_id));
 
             var jsonstr = await request.GetAsStringAsync();
             var json = SimpleJSON.JSON.Parse(jsonstr);
@@ -71,9 +71,10 @@ namespace Hsinpa.ClientSample {
         #endregion
 
         #region OnSocket Event
-        private void EmitStartGameEvent()
+        private void EmitStartGameEvent(string raw_json_string)
         {
             //Do something here
+            RoomComponentType roomStruct = JsonUtility.FromJson<RoomComponentType>(raw_json_string);
         }
 
         private void EmitEndGameEvent()
@@ -85,5 +86,15 @@ namespace Hsinpa.ClientSample {
         }
         #endregion
 
+
+        [System.Serializable]
+        public struct RoomComponentType
+        {
+            public string room_id;
+            public string host_id;
+            public int game_id;
+            public long start_time;
+            public long end_time;
+        }
     }
 }

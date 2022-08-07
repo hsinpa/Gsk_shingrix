@@ -15,6 +15,8 @@ namespace Hsinpa.UI
         [SerializeField]
         private Button StartBtn;
 
+        public Hsinpa.View.Tab Tab;
+
         public void SetStartBtnAction(System.Action callback)
         {
             Hsinpa.Utility.UtilityFunc.SetSimpleBtnEvent(this.StartBtn, callback);
