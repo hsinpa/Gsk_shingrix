@@ -44,12 +44,16 @@ namespace Hsinpa.ClientSample {
         /// If -1 => socket id is not exist
         /// </summary>
         /// <returns></returns>
-        public async Task<int> GetRanking(int game_id) {
-            var request = new HTTPRequest(new Uri(domain + "rank/"+ socket_id +"/"+ game_id));
+        public void GetRanking(int game_id, System.Action<int> callback) {
+            var request = new HTTPRequest(new Uri(domain + "rank/"+ socket_id +"/"+ game_id), HTTPMethods.Get, callback: (HTTPRequest req, HTTPResponse resp) => 
+                {
+                    var jsonstr = resp.DataAsText;
+                    var json = SimpleJSON.JSON.Parse(jsonstr);
+                    callback(json["rank"].AsInt);
+                }
+            );
 
-            var jsonstr = await request.GetAsStringAsync();
-            var json = SimpleJSON.JSON.Parse(jsonstr);
-            return json["rank"].AsInt;
+            request.Send();
         }
 
         public void SendFeedback(string display_name, string message)
