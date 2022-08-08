@@ -29,15 +29,15 @@ namespace Hsinpa.UI
             this._endTimeStamp = DateTimeOffset.FromUnixTimeMilliseconds(endTimestamp).DateTime;
             this._startTimeStamp = DateTime.UtcNow;
 
-            //timer.text = string.Format(TypeStruct.StaticText.Timer, "00");
-            timer.text = "00";
-
+            timer.text = string.Format(TypeStruct.StaticText.Timer, "00");
+            //timer.text = "00";
         }
 
         public void ResetTimer() {
             this._endTimeStamp = DateTime.MinValue;
             this._startTimeStamp = DateTime.UtcNow;
-            timer.text = "00";
+
+            timer.text = string.Format(TypeStruct.StaticText.Timer, "00");
         }
 
         public void ShowStart(bool is_show)
@@ -56,8 +56,8 @@ namespace Hsinpa.UI
             TimeSpan t = this._endTimeStamp - DateTime.UtcNow;
 
             int second_clamp = Math.Clamp(t.Seconds, 0, 60);
-            //timer.text = string.Format(TypeStruct.StaticText.Timer, second_clamp);
-            timer.text = second_clamp.ToString();
+            timer.text = string.Format(TypeStruct.StaticText.Timer, second_clamp);
+            //timer.text = second_clamp.ToString();
 
             if (t.Seconds < 0)
             {

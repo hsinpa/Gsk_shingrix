@@ -79,7 +79,7 @@ namespace Hsinpa.Ranking {
             public const string TotalScore = "每分鐘全場以協助<br><b><size=82><color=#B50003>{0}</color></size></b>人<br>預防帶狀皰疹發生";
             public const string TotalScoreEnd = "{0}<size=40>人</size>";
 
-            public const string Timer = "Count down in<br><size=42><color=#B50003>{0}</color></size>  secs";
+            public const string Timer = "<size=30><color=#34495e>Count down in</color></size><br>{0}<size=30><color=#34495e><voffset=0.4em> secs</voffset></color></size>";
         }
     }
 }
