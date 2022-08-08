@@ -1,0 +1,43 @@
+<html>
+<title>Feedback</title>
+<head>
+    <!-- <link rel="stylesheet" type="text/css" href="/css/main.css" /> -->
+</head>
+
+<style>
+    h6    {margin: 0px auto;}
+    p    {margin: 0px auto;}
+</style>
+
+<body>
+<h2>Feedbacks</h2>
+
+<div class="feedback_list">
+</div>
+
+</body>
+<script type="text/javascript">
+
+    fetch("/review_feedback/30").
+    then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson) {
+        render(myJson);
+    });
+
+    function render(data) {
+        var el = document.querySelector(".feedback_list");
+        let html = "";
+
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i]);
+            let date = new Date(data[i].create_date).toLocaleString();
+            html += `<h6>${data[i].name}, ${date}</h6>`;
+            html += `<p>${data[i].feedback}</p>`;
+            html += `</br>`;
+        }
+        el.innerHTML = (html);
+    }
+</script>
+</html>

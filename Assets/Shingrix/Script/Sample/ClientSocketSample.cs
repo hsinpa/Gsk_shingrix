@@ -45,12 +45,28 @@ namespace Hsinpa.ClientSample {
         /// </summary>
         /// <returns></returns>
         public async Task<int> GetRanking(int game_id) {
-            var request = new HTTPRequest(new Uri(domain + "/rank/"+ socket_id +"/"+ game_id));
+            var request = new HTTPRequest(new Uri(domain + "rank/"+ socket_id +"/"+ game_id));
 
             var jsonstr = await request.GetAsStringAsync();
             var json = SimpleJSON.JSON.Parse(jsonstr);
             return json["rank"].AsInt;
         }
+
+        public void SendFeedback(string display_name, string message)
+        {
+            var request = new HTTPRequest(new Uri(domain+ "report_feedback"), HTTPMethods.Post);
+            request.AddHeader("Content-Type", "application/json");
+
+            var json = new
+            {
+                feedback = message,
+                name = display_name,
+            };
+
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
+            request.Send();
+        }
+
         #endregion
 
         #region Emit

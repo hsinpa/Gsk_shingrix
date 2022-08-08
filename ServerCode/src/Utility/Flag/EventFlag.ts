@@ -25,7 +25,8 @@ export const OnSocketEvent = {
 
 
 export const DatabaseTableName = {
-    Score : "score_table"
+    Score : "scores",
+    Feedback : "feedbacks"
 }
 
 export const DatabaseErrorType = {
