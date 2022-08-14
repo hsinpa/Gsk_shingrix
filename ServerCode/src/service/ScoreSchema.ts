@@ -6,7 +6,7 @@ const score_schema = new Schema({
     score : Number,
     game_id: Number,
     session: String,
-    create_date : {type : Date, default :Date.UTC},
+    create_date : {type : Date, default : Date.now},
 });
 
 export default score_schema;
