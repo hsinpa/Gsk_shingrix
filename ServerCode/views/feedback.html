@@ -7,31 +7,75 @@
 <style>
     h6    {margin: 0px auto;}
     p    {margin: 0px auto;}
+    h2    { margin: auto 10px; display: inline-block;}
 </style>
 
 <body>
+<div class="feedback_header">
 <h2>Feedbacks</h2>
-
+<button name="download_csv">Download CSV</button>
+</div>
+<hr>
 <div class="feedback_list">
 </div>
 
 </body>
 <script type="text/javascript">
 
-    fetch("/review_feedback/30").
-    then(function(response) {
-        return response.json();
-    })
-    .then(function(myJson) {
-        render(myJson);
+    let csv_button = document.querySelector("button[name=download_csv]");
+    csv_button.addEventListener('click', function (event) {
+        fetchData(2000, (json) => {
+
+            buildData(json).then(function(json_array) {
+                let csvContent = "data:text/csv;charset=utf-8," + json_array.map(e => e.join(",")).join("\n");
+                var encodedUri = encodeURI(csvContent);
+                window.open(encodedUri);
+            });
+        });
     });
+
+    function fetchData(count, callback) {
+        fetch("/review_feedback/" + count).
+        then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            callback(myJson);
+        });
+    }
+
+    const buildData = data => {
+
+        return new Promise((resolve, reject) => {
+
+        // 最後所有的資料會存在這
+        let arrayData = [];
+
+        // 取 data 的第一個 Object 的 key 當表頭
+        let arrayTitle = Object.keys(data[0]);
+        arrayData.push(arrayTitle);
+
+        // 取出每一個 Object 裡的 value，push 進新的 Array 裡
+        Array.prototype.forEach.call(data, d => {
+            let items = [];
+            Array.prototype.forEach.call(arrayTitle, title => {
+            let item = d[title] || '無';
+            items.push(item);
+            });
+            arrayData.push(items)
+        })
+
+        resolve(arrayData);
+        })
+    }
+
 
     function render(data) {
         var el = document.querySelector(".feedback_list");
         let html = "";
 
         for (let i = 0; i < data.length; i++) {
-            console.log(data[i]);
+            //console.log(data[i]);
             let date = new Date(data[i].create_date).toLocaleString();
             html += `<h6>${data[i].name}, ${date}</h6>`;
             html += `<p>${data[i].feedback}</p>`;
@@ -39,5 +83,9 @@
         }
         el.innerHTML = (html);
     }
+
+    fetchData(30, (json) => {
+        render(json);        
+    });
 </script>
 </html>

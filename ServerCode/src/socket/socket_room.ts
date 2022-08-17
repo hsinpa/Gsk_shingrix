@@ -90,7 +90,7 @@ export default class SocketRoom {
 
     private SetRoomTimer(start_time : number) {
         let endExtendMinute = 1;
-        let endDateMiliSecond = new Date(start_time + endExtendMinute * 60000);
+        let endDateMiliSecond = new Date(start_time + endExtendMinute * 64000);
 
         this.m_room.start_time = start_time;
         this.m_room.end_time = endDateMiliSecond.getTime();        

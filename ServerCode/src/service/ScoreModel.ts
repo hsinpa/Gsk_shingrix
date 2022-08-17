@@ -14,7 +14,7 @@ class ScoreModel {
     insert(session_id: string, game_id: number, users: UserComponentType[]) {
         let filter_users = users.filter(x=>x.score > 0);
         let select_users = filter_users.map(x => <score_schema_type>
-           {name: x.name, session: session_id, socket_id: x.socket_id, game_id: game_id, score:x.score}
+           {name: x.name, session: session_id, socket_id: x.socket_id, game_id: game_id, score: x.score}
         );
         try {
          this._scoreSchema.insertMany(select_users);
