@@ -39,6 +39,23 @@ class ScoreModel {
             {$match : {socket_id : p_user_id, game_id : p_game_id}},
          ] )
     }
+
+    find_ranking_in_session(p_user_id: string, p_session: string) {
+      return this._scoreSchema.aggregate( [
+       {
+             $setWindowFields: {
+                partitionBy: "$session",
+                sortBy: { score: -1 },
+                output: {
+                   ranking: {
+                      $rank: {}
+                   }
+                }
+             }
+          },
+          {$match : {socket_id : p_user_id, session : p_session}},
+       ] )
+  }
 }
 
 export default ScoreModel;

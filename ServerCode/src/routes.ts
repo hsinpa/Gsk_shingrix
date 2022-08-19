@@ -23,9 +23,9 @@ export function SetRouter(router : Router, mongodb:MongoDB) {
       await ctx.render('feedback', {feedback: r});
     });
 
-    router.get('/rank/:id/:game_id', async function (ctx:any, next:any) {
-        let r = (await mongodb.scoreModel.find_ranking(ctx.params.id, parseInt(ctx.params.game_id)));
-        console.log(r);
+    router.get('/rank/:id/:session', async function (ctx:any, next:any) {
+        let r = (await mongodb.scoreModel.find_ranking_in_session(ctx.params.id, ctx.params.session));
+        //console.log(r);
         r = r.sort(function (a, b) {
           return a.ranking - b.ranking;
         });

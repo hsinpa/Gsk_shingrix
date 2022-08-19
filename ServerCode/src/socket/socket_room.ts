@@ -25,7 +25,7 @@ export default class SocketRoom {
     constructor(io: Server, score_model : ScoreModel) {     
         this.m_io = io;
         this.m_score_model = score_model;
-        this.m_room = {room_id: UniversalParameter.RoomName, host_id: "", game_id: -1, start_time: 0, end_time: 0}
+        this.m_room = {room_id: UniversalParameter.RoomName, host_id: "", session_id: "", game_id: -1, start_time: 0, end_time: 0}
     }
 
     StartGame(id: string, game_id : number)  {
@@ -33,6 +33,7 @@ export default class SocketRoom {
         this.SetRoomTimer(Date.now());
         this.m_room.host_id = id;
         this.m_room.game_id = game_id;
+        this.m_room.session_id = this.m_session_id;
         this.m_io.in(UniversalParameter.RoomName).emit(SocketEvent.StartGame, JSON.stringify(this.m_room));
     }
 
@@ -52,7 +53,7 @@ export default class SocketRoom {
         this.EmitUserType(SocketEvent.UpdateUser, new_user);
 
         if (this.IsGameStart())
-            socket.emit(SocketEvent.StartGame, JSON.stringify({room : this.m_room}));
+            socket.emit(SocketEvent.StartGame, JSON.stringify(this.m_room));
         
         this.m_io.emit(
             SocketEvent.Join,

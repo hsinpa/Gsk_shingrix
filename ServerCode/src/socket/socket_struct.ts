@@ -15,7 +15,7 @@ export interface RoomComponentType {
     room_id : string,
     host_id : string,
     game_id : number,
-
+    session_id: string,
     start_time : number,
     end_time : number,
 }
