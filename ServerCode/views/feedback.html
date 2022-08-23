@@ -13,7 +13,9 @@
 <body>
 <div class="feedback_header">
 <h2>Feedbacks</h2>
-<button name="download_csv">Download CSV</button>
+<button name="download_feed_csv">Download Feedback CSV</button>
+<button name="download_score_csv">Download Score CSV</button>
+<button name="delete_score_csv">Delete Score Dataset</button>
 </div>
 <hr>
 <div class="feedback_list">
@@ -22,20 +24,44 @@
 </body>
 <script type="text/javascript">
 
-    let csv_button = document.querySelector("button[name=download_csv]");
-    csv_button.addEventListener('click', function (event) {
-        fetchData(2000, (json) => {
-
-            buildData(json).then(function(json_array) {
-                let csvContent = "data:text/csv;charset=utf-8," + json_array.map(e => e.join(",")).join("\n");
-                var encodedUri = encodeURI(csvContent);
-                window.open(encodedUri);
-            });
+    let feedback_csv_button = document.querySelector("button[name=download_feed_csv]");
+    feedback_csv_button.addEventListener('click', function (event) {
+        fetchData("/review_feedback/2000", (json) => {
+            downloadCSVFile(json);
         });
     });
 
-    function fetchData(count, callback) {
-        fetch("/review_feedback/" + count).
+    let score_csv_button = document.querySelector("button[name=download_score_csv]");
+    score_csv_button.addEventListener('click', function (event) {
+        fetchData("/rank", (json) => {
+            downloadCSVFile(json);
+        });
+    });
+
+    let delete_score_button = document.querySelector("button[name=delete_score_csv]");
+    delete_score_button.addEventListener('click', function (event) {
+        var answer = window.confirm("確認要資料刪除嗎");
+        if (answer) {
+            fetch("/delete_rank");
+        }
+    });
+
+    function downloadCSVFile(json) {
+
+        if (json.length <= 0) {
+            alert("資料不存在");
+            return;
+        }
+
+        buildData(json).then(function(json_array) {
+            let csvContent = "data:text/csv;charset=utf-8," + json_array.map(e => e.join(",")).join("\n");
+            var encodedUri = encodeURI(csvContent);
+            window.open(encodedUri);
+        });
+    }
+
+    function fetchData(relative_url, callback) {
+        fetch(relative_url).
         then(function(response) {
             return response.json();
         })
@@ -84,7 +110,7 @@
         el.innerHTML = (html);
     }
 
-    fetchData(30, (json) => {
+    fetchData("/review_feedback/30", (json) => {
         render(json);        
     });
 </script>

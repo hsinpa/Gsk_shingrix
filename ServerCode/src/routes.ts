@@ -38,6 +38,21 @@ export function SetRouter(router : Router, mongodb:MongoDB) {
         ctx.body = JSON.stringify(return_json);
       });
 
+      router.get('/rank', async function (ctx:any, next:any) {
+        let r = (await mongodb.scoreModel.get_best_score());
+        //console.log(r);
+        r = r.sort(function (a, b) {
+          return a.ranking - b.ranking;
+        });  
+
+        ctx.body = JSON.stringify(r);;
+      });
+
+      router.get('/delete_rank', async function (ctx:any, next:any) {
+        let r = await mongodb.scoreModel.dispose();
+        ctx.body = r;
+      });
+
     router.post('/report_feedback', async function (ctx:any, next:any) {
       if ("feedback" in ctx.request.body && "name" in ctx.request.body) {
         mongodb.feedbackModel.insert(ctx.request.body.feedback, ctx.request.body.name);
@@ -52,4 +67,5 @@ export function SetRouter(router : Router, mongodb:MongoDB) {
 
       ctx.body = JSON.stringify(r);;
     });
+
 }

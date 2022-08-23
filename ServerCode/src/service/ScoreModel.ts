@@ -55,7 +55,28 @@ class ScoreModel {
           },
           {$match : {socket_id : p_user_id, session : p_session}},
        ] )
-  }
+   }
+
+   get_best_score() {
+      return this._scoreSchema.aggregate( [
+         {
+               $setWindowFields: {
+                  partitionBy: "$game_id",
+                  sortBy: { score: -1 },
+                  output: {
+                     ranking: {
+                        $rank: {}
+                     }
+                  }
+               }
+            }
+         ] )
+   }
+
+   dispose() {
+      return this._scoreSchema.deleteMany({});
+
+   }
 }
 
 export default ScoreModel;
